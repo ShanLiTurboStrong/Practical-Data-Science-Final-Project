@@ -1,0 +1,44 @@
+1. Dear Professor and TA, our final project topic is relational analysis of people’s income and restaurants nearby. Our goal is to extract several features from restaurant businesses as well as people’s income-related businesses such as people’s salaries, business income, pensions and capital gain, first visualize the data itself have a intuitive feeling of this data, and then analyze the relation between these two cross-fields features.
+
+2. This is topics that we gonna talk today. First…Second…
+
+3. First let me introduction the intinction behind our work…
+
+4. Our data is from two sources: one is .. the other is…
+
+5. Let me introduce how we got the data and how we preprocess these data.
+
+6. Now is Relationship analysis part. First let me show you the Empirical Cumulative Distribution plot of IRS data itself. The x-axis stands for averaged quantities in thousands of dollars scale; and the y-axis stands percentage from 0 to 1; each point i these plots is corresponding to one region with a same postal code. So in some sense, these plots reflect these relations in a country wide range.
+
+
+
+
+1. reduce xxx features to yyyy
+2. regression metric, method  Pearson's Correlation
+
+[title page]
+
+For our project, we explored a few intresting questions on the relationship between people's average income and the characterastics of restaurants around them. 
+
+[Data Collection and Cleaning]
+We combined the data from two seperate sources:
+
+ We crawled Yelp Restuarant data using Yelp Fusion API and the official US Tax information from IRS. We cleaned the data and removed records with few samples to reduce the noise of our results.
+
+In the cleaned dataset, each row represents the income information and restaurants information averaged by the SAME ZIP code
+
+which cover the following areas.
+
+[Plots]
+We examined the cumulative distribution for people's total income, as well as other forms of incomes, where salary takes the majority of the total income.
+
+From Yelp Data, we can see the average rating is evenly distributed, while over 80% of restuarants has fewer than 200 reviews and the top 2% of them has over a thousand reviews. 
+
+[relationship]
+We examined the correlation between average salary and other kind of incomes. It shows that the business income and average pension are positively related to average salary while Capital gain seems quite independent. Which is not surprising.
+
+[Yelp]
+However, we do find that the average rating tends to be higher when the price goes up. On the other hand, there are still a bunch of high-rating restaurants with moderate price. The plot on the right shows that when there are many reviews for a restuarant, the rating is very likely to be high.
+
+[&&]
+When we joined the two table by the same zipcode, we find the correlation between local peoples income and the rating is actually weak. This means the key to a successful restaurant is NOT the wealthiness of the people in this area!

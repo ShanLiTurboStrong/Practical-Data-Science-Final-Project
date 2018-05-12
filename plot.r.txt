@@ -1,0 +1,95 @@
+install.packages("DBI")
+install.packages("RSQLite")
+
+library(DBI)
+library(RSQLite)
+library(ggplot2)
+setwd("~/GoogleCloud/15-688PDS/project/src")
+con = dbConnect(SQLite(), dbname="irs.db")
+query = "SELECT * FROM irs_1;"
+myQuery <- dbSendQuery(con, query)
+my_data <- dbFetch(myQuery, n = -1)
+dbClearResult(myQuery)
+
+d<-my_data[!(my_data$zipcode=="00000" | my_data$zipcode=="99999"),]
+Avg_tot_ecdf <- ecdf(d$Avg_total_return)
+plot(Avg_tot_ecdf, xlab = 'Average Total Income (thousand dollars)', ylab = '', main = 'Empirical Cumluative Distribution\nAverage Total Income for each ZIP code in US')
+
+Avg_sal_ecdf <- ecdf(d$Avg_salary)
+plot(Avg_sal_ecdf, xlab = 'Average Salary Income (thousand dollars)', ylab = '', main = 'Empirical Cumluative Distribution\nAverage Salary Income for each ZIP code in US')
+
+Avg_bus_ecdf <- ecdf(d$Avg_business)
+plot(Avg_bus_ecdf, xlab = 'Average Business Income (thousand dollars)', ylab = '', main = 'Empirical Cumluative Distribution\nAverage Business Income for each ZIP code in US')
+
+Avg_unemploy_ecdf <- ecdf(d$Avg_unemploy)
+plot(Avg_unemploy_ecdf, xlab = 'Average Unemployment Compensation (thousand dollars)', ylab = '', main = 'Empirical Cumluative Distribution\nAverage Unemployment Compensation for each ZIP code in US')
+
+Avg_pension_ecdf <- ecdf(d$Avg_pension)
+plot(Avg_pension_ecdf, xlab = 'Average Pension Income (thousand dollars)', ylab = '', main = 'Empirical Cumluative Distribution\nAverage Pension Income for each ZIP code in US')
+
+Avg_capital_ecdf <- ecdf(d$Avg_capital)
+plot(Avg_capital_ecdf, xlab = 'Average Capital Gain (thousand dollars)', ylab = '', main = 'Empirical Cumluative Distribution\nAverage Capital Gain for each ZIP code in US')
+
+
+ggplot(d, aes(x=Avg_salary, y=Avg_business)) + xlab('Average Salary') + ylab('Average Business Income')+
+    geom_point(shape=1) +
+    geom_smooth(method=lm)
+
+ggplot(d, aes(x=Avg_salary, y=Avg_capital)) + xlab('Average Salary') + ylab('Average Capital Gain')+
+    geom_point(shape=1) +
+    geom_smooth(method=lm)
+
+ggplot(d, aes(x=Avg_salary, y=Avg_unemploy)) + xlab('Average Salary') + ylab('Average Unemployment Compensation')+
+    geom_point(shape=1) +
+    geom_smooth(method=lm)
+
+ggplot(d, aes(x=Avg_salary, y=Avg_pension)) + xlab('Average Salary') + ylab('Average Pension')+
+    geom_point(shape=1) +
+    geom_smooth(method=lm)
+
+
+con = dbConnect(SQLite(), dbname="yelp.db")
+query = "SELECT * FROM yelp_mean;"
+myQuery <- dbSendQuery(con, query)
+my_data <- dbFetch(myQuery, n = -1)
+dbClearResult(myQuery)
+
+Avg_rat_ecdf <- ecdf(my_data$avg_rating)
+plot(Avg_rat_ecdf, xlab = 'Average Rating', ylab = '', main = 'Empirical Cumluative Distribution\nAverage Rating for each ZIP code in Yelp')
+
+
+Avg_rev_ecdf <- ecdf(my_data$review_count)
+plot(Avg_rev_ecdf, xlab = 'Average Review Count', ylab = '', main = 'Empirical Cumluative Distribution\nAverage Review Count for each ZIP code in Yelp')
+
+
+
+con = dbConnect(SQLite(), dbname="yelp.db")
+query = "SELECT * FROM yelp_price;"
+myQuery <- dbSendQuery(con, query)
+my_data1 <- dbFetch(myQuery, n = -1)
+dbClearResult(myQuery)
+
+Avg_prc_ecdf <- ecdf(my_data1$avg_price)
+plot(Avg_prc_ecdf, xlab = 'Average Price', ylab = '', main = 'Empirical Cumluative Distribution\nAverage Price for each ZIP code in Yelp')
+
+
+ggplot(my_data, aes(x=review_count, y=avg_rating)) +
+    geom_point(shape=1) +
+    geom_smooth(method=lm)
+
+dat <- data.frame(xvar=my_data1$avgprice, yvar=my_data$avg_rating)
+ggplot(dat, aes(x=xvar, y=yvar)) + xlab('Average Price') + ylab('Average Rating')+
+    geom_point(shape=1) +
+    geom_smooth(method=lm)
+
+
+jdata <- merge(d,my_data,by="zipcode")
+jdata <- merge(jdata, my_data1,by='zipcode')
+
+ggplot(jdata, aes(x=Avg_salary, y=avgprice)) + xlab('Average Salary') + ylab('Average Price')+
+    geom_point(shape=1) +
+    geom_smooth(method=lm)
+
+ggplot(jdata, aes(x=Avg_salary, y=review_count)) + xlab('Average Salary') + ylab('Average Review Count')+
+geom_point(shape=1) +
+geom_smooth(method=lm)

@@ -1,0 +1,30 @@
+SELECT zipcode FROM (
+SELECT STATE, zipcode, sum(N02650) as c1, sum(A02650), sum(N00200) as c2, sum(A00200), sum(N00900) as c3, sum(A00900), sum(N02300) as c4, sum(A02300), sum(N01700) as c5, sum(A01700), sum(N01000) as c6, sum(A01000) FROM irs GROUP BY zipcode
+) where c1 >= 1200 and c2 >= 1200 and c3 >= 1200 and c4 >= 1200 and c5 >= 1200 and c6 >= 1200;
+
+CREATE TABLE yelp_mean AS
+    SELECT zipcode, avg(rating) as avg_rating,
+     avg(review_count) as review_count
+    FROM yelp
+    GROUP BY zipcode;
+
+CREATE TABLE yelp_price AS
+    SELECT zipcode, avg(price_val) as avgprice
+    FROM
+    (SELECT zipcode, length(price) as price_val
+    FROM yelp)
+    GROUP BY zipcode;
+
+SELECT * from yelp_mean limit 5;
+
+CREATE TABLE irs_1 AS
+  SELECT 
+  	STATE, zipcode, Ntotal_return, Atotal_return/Ntotal_return as Avg_total_return, 
+  	Nsalary, Asalary/Nsalary as Avg_salary,
+  	Nbusiness, Abusiness/Nbusiness as Avg_business,
+  	Nunemploy, Aunemploy/Nunemploy as Avg_unemploy,
+  	Npension, Apension/Npension as Avg_pension,
+  	Ncapital, Acapital/Ncapital as Avg_capital
+  FROM (
+		SELECT STATE, zipcode, sum(N02650) as Ntotal_return, sum(A02650) as Atotal_return, sum(N00200) as Nsalary, sum(A00200) as Asalary, sum(N00900) as Nbusiness, sum(A00900) as Abusiness, sum(N02300) as Nunemploy, sum(A02300) as Aunemploy, sum(N01700) as Npension, sum(A01700) as Apension, sum(N01000) as Ncapital, sum(A01000) as Acapital FROM irs GROUP BY zipcode
+	) where Ntotal_return >= 1200 and Nsalary >= 1200 and Nbusiness >= 1200 and Nunemploy >= 1200 and Npension >= 1200 and Ncapital >= 1200;
